@@ -17,3 +17,6 @@ whitenoise==6.12.0
 django-cors-headers==4.9.0
 
 python-dotenv==1.2.1
+
+cloudinary
+django-cloudinary-storage
