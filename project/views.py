@@ -586,22 +586,25 @@ class TopicViewSet(ModelViewSet):
 
     @action(detail=True,methods=["post"],url_path="ai-topic-tutor",permission_classes=[IsAuthenticated])
     def studentDoutSolve(self, request, pk=None):
-        doubt = request.data.get("Dout")
+        # doubt = request.data.get("Dout")
+        return Response({
+            "data":"this is my dout"
+        })
         
-        if not doubt:
-            return Response(
-                {"error": "Dout is required"},
-                status=400
-            )
+        # if not doubt:
+        #     return Response(
+        #         {"error": "Dout is required"},
+        #         status=400
+        #     )
  
-        solution = doubt_solve(            
-            doubt
-        )
+        # solution = doubt_solve(            
+        #     doubt
+        # )
         
 
-        return Response(
-            {"data": solution}
-        )
+        # return Response(
+        #     {"data": solution}
+        # )
 
 
 class FileViewSet(ModelViewSet):
