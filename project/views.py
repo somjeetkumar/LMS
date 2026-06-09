@@ -586,11 +586,10 @@ class TopicViewSet(ModelViewSet):
 
     @action(detail=True,methods=["post"],url_path="ai-topic-tutor",permission_classes=[IsAuthenticated])
     def studentDoutSolve(self, request, pk=None):
-        # doubt = request.data.get("Dout")
+        doubt = request.data.get("Dout")
         return Response({
-            "data":"this is my dout"
+            "data":"this function called","d":doubt
         })
-        
         # if not doubt:
         #     return Response(
         #         {"error": "Dout is required"},
