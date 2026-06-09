@@ -589,7 +589,7 @@ class TopicViewSet(ModelViewSet):
         doubt = request.data.get("Dout")
         print('this is student dout -> ', doubt)
         return Response(
-            {"data": doubt}
+            {"data": "this is my dout"}
         )
         # if not doubt:
         #     return Response(
