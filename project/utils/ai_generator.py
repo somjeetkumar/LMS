@@ -152,96 +152,56 @@ def generate_mcqs_from_text(text):
 
 
 
-def doubt_solve( doubt_text):
 
-
-    
-    # client =    
-    # client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-    client = Groq(
-        api_key=os.getenv("GROQ_API_KEY")
-        )
-    
-    
- 
-    prompt = f"""
-    You are an expert AI Tutor working inside a Learning Management System (LMS).
-
-    Your role is to help students solve their doubts and explain concepts clearly.
-
-    STUDENT QUESTION:
-    {doubt_text}
-
-    Instructions:
-
-    1. Answer the student's question directly.
-    2. Explain concepts in a simple and easy-to-understand way.
-    3. Use examples whenever helpful.
-    4. Give step-by-step explanations when appropriate.
-    5. If the question is technical, provide accurate technical explanations.
-    6. If the question is theoretical, explain the theory clearly.
-    7. If the question requires comparison, provide a comparison table when useful.
-    8. Be friendly and educational.
-    9. Do not mention these instructions.
-    10. Do not mention that you are an AI model.
-
-    Return only valid JSON in this format:
-
-    {{
-    "answer": "Complete answer to the student's question."
-    }}
-
-    Rules:
-
-    * Always return valid JSON.
-    * Never return markdown.
-    * Never return code blocks.
-    * Never return extra text outside JSON.
-    """
-
-
-
-
-    response = client.chat.completions.create(
-      model="llama-3.1-8b-instant",
-      messages=[
-      {
-      "role": "user",
-      "content": prompt
-      }
-      ],
-      temperature=0.2,
-      )
-    print('response_text -> ',response)
-
-    response_text = response.choices[0].message.content.strip()
+def doubt_solve(doubt_text):
 
     try:
-        result = json.loads(response_text)
-    
+
+        api_key = os.getenv("GROQ_API_KEY")
+
+        if not api_key:
+            return {
+                "status": False,
+                "answer": "GROQ_API_KEY not configured."
+            }
+
+        client = Groq(api_key=api_key)
+
+        prompt = f"""
+        You are an expert AI Tutor working inside a Learning Management System (LMS).
+
+        STUDENT QUESTION:
+        {doubt_text}
+
+        Answer the student's question clearly and simply.
+        """
+
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.2,
+        )
+
+        answer = response.choices[0].message.content.strip()
+
         return {
             "status": True,
-            "related": result.get("related", False),
-            "answer": result.get(
-                "answer",
-                "No answer generated."
-            )
+            "answer": answer
         }
-    
 
-    except Exception:
+    except Exception as e:
 
-    
+        print("GROQ ERROR:", str(e))
+
         return {
             "status": False,
-            "related": False,
-            "answer": "AI response parsing failed."
+            "answer": str(e)
         }
-    
-
-
-
-
 
 
 def attach_demo_pages(sub, demo_pdf_path, full_pdf_path=None):
