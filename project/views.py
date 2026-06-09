@@ -587,6 +587,7 @@ class TopicViewSet(ModelViewSet):
     @action(detail=True,methods=["post"],url_path="ai-topic-tutor",permission_classes=[IsAuthenticated])
     def studentDoutSolve(self, request, pk=None):
         doubt = request.data.get("Dout")
+        print('this is student dout -> ', doubt)
         
         if not doubt:
             return Response(
