@@ -588,8 +588,11 @@ class TopicViewSet(ModelViewSet):
     def studentDoutSolve(self, request, pk=None):
         doubt = request.data.get("Dout")
         return Response({
-            "data":"this function called","d":doubt
+            "data": "SOMJEET_RENDER_TEST_2026"
         })
+        # return Response({
+        #     "data":"this function called","d":doubt
+        # })
         # if not doubt:
         #     return Response(
         #         {"error": "Dout is required"},
