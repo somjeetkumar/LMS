@@ -588,21 +588,23 @@ class TopicViewSet(ModelViewSet):
     def studentDoutSolve(self, request, pk=None):
         doubt = request.data.get("Dout")
         print('this is student dout -> ', doubt)
-        
-        if not doubt:
-            return Response(
-                {"error": "Dout is required"},
-                status=400
-            )
- 
-        solution = doubt_solve(            
-            doubt
+        return Response(
+            {"data": doubt}
         )
+        # if not doubt:
+        #     return Response(
+        #         {"error": "Dout is required"},
+        #         status=400
+        #     )
+ 
+        # solution = doubt_solve(            
+        #     doubt
+        # )
         
 
-        return Response(
-            {"data": solution}
-        )
+        # return Response(
+        #     {"data": solution}
+        # )
 
 
 class FileViewSet(ModelViewSet):
