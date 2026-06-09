@@ -8,11 +8,14 @@ from pypdf import PdfReader, PdfWriter
 import requests
 from PyPDF2 import PdfReader, PdfWriter
 from groq import Groq
+from dotenv import load_dotenv
+
 
 
 import os
 
 
+load_dotenv()
 
 
 
@@ -22,7 +25,12 @@ def generate_mcqs_from_text(text):
 
     
 
-    client = os.getenv("GROQ_API_KEY")    
+    # client = os.getenv("GROQ_API_KEY")    
+        # client =    
+    # client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    client = Groq(
+        api_key=os.getenv("GROQ_API_KEY")
+        )
 
     style = random.choice([
         "definition based",
@@ -148,7 +156,13 @@ def doubt_solve( doubt_text):
 
 
     
-    client = os.getenv("GROQ_API_KEY")   
+    # client =    
+    # client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    client = Groq(
+        api_key=os.getenv("GROQ_API_KEY")
+        )
+    
+    
  
     prompt = f"""
     You are an expert AI Tutor working inside a Learning Management System (LMS).
@@ -198,12 +212,12 @@ def doubt_solve( doubt_text):
       ],
       temperature=0.2,
       )
+    print('response_text -> ',response)
 
     response_text = response.choices[0].message.content.strip()
 
     try:
         result = json.loads(response_text)
-
     
         return {
             "status": True,
