@@ -4,6 +4,10 @@ from rest_framework.decorators import action
 from pypdf import  PdfReader
 from rest_framework.viewsets import ViewSet,ModelViewSet
 
+from io import BytesIO
+import requests
+from PyPDF2 import PdfReader
+
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.cache import cache
@@ -379,10 +383,12 @@ class ChapterViewSet(ModelViewSet):
             topics__chapter=chapter,
             file_type='PDF'
         )   
+
         full_text = ""
         for pdf in pdfs:
-            pdf_path = pdf.file.path
-            reder = PdfReader(pdf_path)
+            pdf_path = pdf.file.url
+            response = requests.get(pdf_path)
+            reder = PdfReader(BytesIO(response.content))
             for page in reder.pages:
                 full_text += page.extract_text() or ""
         full_text += "\n\n"
@@ -412,6 +418,8 @@ class ChapterViewSet(ModelViewSet):
         
         return Response({'question':UiData},
         status=status.HTTP_200_OK)
+ 
+ 
     @action(detail=True,methods=['get','put'],url_path="studentTestsubmitcheck",permission_classes=[IsAuthenticated,RBAC_Permission])
     def studentTestsubmit(self,request,pk=None):
         if request.method == 'GET':

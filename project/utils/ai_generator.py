@@ -22,15 +22,17 @@ load_dotenv()
 
 def generate_mcqs_from_text(text):
 
+    api_key = os.getenv("GROQ_API_KEY")
+
+    if not api_key:
+            return {
+                "status": False,
+                "answer": "GROQ_API_KEY not configured."
+            }
+    client = Groq(api_key=api_key)
 
     
 
-    # client = os.getenv("GROQ_API_KEY")    
-        # client =    
-    # client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-    client = Groq(
-        api_key=os.getenv("GROQ_API_KEY")
-        )
 
     style = random.choice([
         "definition based",
@@ -126,6 +128,7 @@ def generate_mcqs_from_text(text):
         ],
         temperature=0.3
     )
+    
     response_text = response.choices[0].message.content
     
 
