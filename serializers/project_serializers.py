@@ -7,6 +7,7 @@ import os
 from datetime import datetime
 from django.utils import timezone
 from django.conf import settings
+import cloudinary.utils
 import uuid
 from rest_framework import serializers
 
@@ -249,7 +250,8 @@ class FileSerlizers(serializers.ModelSerializer):
     class Meta:
         model = File
         fields = ['id','file','file_type','checked','topics','creater']
-        read_only_fields = ['file_type', 'checked', 'creater']    
+        read_only_fields = ['file_type', 'checked', 'creater']
+
     @transaction.atomic
     def create(self, validated_data):
         topic =validated_data['topics']
@@ -313,11 +315,37 @@ class FileSerlizers_ForCheck(serializers.ModelSerializer):
 
 
 class FilePDFSerlizer(serializers.ModelSerializer):
+    file = serializers.SerializerMethodField()
     class Meta:
         model = File
         fields = ['id','file','checked','file_type']
 
 
+    def get_file(self, obj):
+
+        # Handle Videos
+        
+        if obj.file_type == "VIDEO":
+
+            public_id = obj.file.name.replace(".mp4", "")
+
+            url, _ = cloudinary.utils.cloudinary_url(
+                public_id,
+                resource_type="video",
+                secure=True
+            )
+
+            return url
+
+        # Handle PDFs and Images
+        return obj.file.url
+
+                #{
+                #     "id": 52,
+                #     "file": "https://res.cloudinary.com/doqdymvvj/image/upload/v1/media/erhy9nczjpwi2vmtpfbh.mp4",
+                #     "checked": true,
+                #     "file_type": "VIDEO"
+                # }
 
 
 class TopicsSerlizers(serializers.ModelSerializer):

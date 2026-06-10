@@ -598,7 +598,6 @@ class TopicViewSet(ModelViewSet):
         solution = doubt_solve(            
             doubt
         )
-        print("solution -> ",solution)
         
 
         return Response(
